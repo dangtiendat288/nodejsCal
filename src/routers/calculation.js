@@ -1,4 +1,6 @@
-const express = require('express')
+const express = require('express');
+const req = require('express/lib/request');
+const res = require('express/lib/response');
 const router = express.Router();
 
 const Calculation = require("../model/calculation")
@@ -29,6 +31,15 @@ router.post("/calculation", async (req, res) => {
         res.status(201).send(calculation)
     } catch (e) {
         res.status(400).send(e)
+    }
+})
+
+router.get('/calculation', async (req, res) => {
+    try {
+        const calculations = await Calculation.find({})
+        res.send(calculations)
+    } catch (e) {
+        res.status(500).send();
     }
 })
 
