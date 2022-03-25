@@ -59,4 +59,13 @@ router.get('/calculationByDay', async (req, res) => {
     }
 })
 
+router.get('/calculationByOperation', async (req, res) => {
+    try {
+        const calculations = await Calculation.find({operation: req.body.operation})
+        res.send(calculations)
+    } catch (e) {
+        res.status(500).send();
+    }
+})
+
 module.exports = router;
