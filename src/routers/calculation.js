@@ -7,8 +7,7 @@ const Calculation = require("../model/calculation")
 
 router.post("/calculation", async (req, res) => {
     console.log(req.body)
-    x = req.body.x
-    y = req.body.y
+    const {x, y} = req.body
     result = 0;
     switch (req.body.operation){
         case "Add":
@@ -37,6 +36,23 @@ router.post("/calculation", async (req, res) => {
 router.get('/calculation', async (req, res) => {
     try {
         const calculations = await Calculation.find({})
+        res.send(calculations)
+    } catch (e) {
+        res.status(500).send();
+    }
+})
+
+router.get('/calculationByDay', async (req, res) => {
+    const {yearS, monthS, dayS} = req.body
+    const {yearE, monthE, dayE} = req.body
+
+    let start = new Date(yearS, monthS - 1, dayS);
+    let end = new Date(yearE, monthE - 1, dayE);
+
+    console.log(start, end)
+
+    try {
+        const calculations = await Calculation.find({createdAt: {$gte: start, $lt: end}})
         res.send(calculations)
     } catch (e) {
         res.status(500).send();
